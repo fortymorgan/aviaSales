@@ -16,9 +16,27 @@ const ticketsContainer = document.getElementById('tickets');
 const render = () => {
   tickets.forEach(ticket => {
     const ticketContainer = document.createElement('div');
+    ticketContainer.classList.add('ticket');
+    const stopsString = ticket.stops === 0 ? '' :
+      ticket.stops === 1 ? '1 пересадка' : `${ticket.stops} пересадки`;
   
-    ticketContainer.innerHTML = `<div>
-      <span>Купить за ${ticket.price} ₽</span>
+    ticketContainer.innerHTML = `<div class="buy">
+      <button>Купить за ${ticket.price} ₽</button>
+    </div>
+    <div class="info">
+      <div class="departure">
+        <span class="departure-time">${ticket.departure_time}</span>
+        <span class="departure-point">${ticket.origin}, ${ticket.origin_name}</span>
+        <span class="departure-date">${ticket.departure_date}</span>
+      </div>
+      <div class="stops">
+        <span class="stops-count">${stopsString}</span>
+      </div>
+      <div class="arrival">
+        <span class="arrival-time">${ticket.arrival_time}</span>
+        <span class="arrival-point">${ticket.destination}, ${ticket.destination_name}</span>
+        <span class="arrival-date">${ticket.arrival_date}</span>
+      </div>
     </div>`;
   
     ticketsContainer.appendChild(ticketContainer);
