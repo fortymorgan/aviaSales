@@ -13,6 +13,39 @@ fetch(link)
 
 const ticketsContainer = document.getElementById('tickets');
 
+const dateInFormat = dateString => {
+  const dateArray = dateString.split('.');
+  const date = new Date(`20${dateArray[2]}`, dateArray[1], dateArray[0]);
+  const day = date.getDate();
+  const daysOfWeek = {
+    0: 'Вс',
+    1: 'Пн',
+    2: 'Вт',
+    3: 'Ср',
+    4: 'Чт',
+    5: 'Пт',
+    6: 'Сб',
+  };
+  const dayOfWeek = daysOfWeek[date.getDay()];
+  const months = {
+    1: 'янв',
+    2: 'фев',
+    3: 'мар',
+    4: 'апр',
+    5: 'май',
+    6: 'июнь',
+    7: 'июль',
+    8: 'авг',
+    9: 'сен',
+    10: 'окт',
+    11: 'ноя',
+    12: 'дек',
+  };
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  return `${day} ${month} ${year},${dayOfWeek}`;
+};
+
 const render = () => {
   tickets.forEach(ticket => {
     const ticketContainer = document.createElement('div');
