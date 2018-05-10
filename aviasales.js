@@ -51,10 +51,10 @@ const render = () => {
     const ticketContainer = document.createElement('div');
     ticketContainer.classList.add('ticket');
     const stopsString = ticket.stops === 0 ? '' :
-      ticket.stops === 1 ? '1 пересадка' : `${ticket.stops} пересадки`;
+      ticket.stops === 1 ? '1 ПЕРЕСАДКА' : `${ticket.stops} ПЕРЕСАДКИ`;
   
     ticketContainer.innerHTML = `<div class="buy">
-      <button>Купить за ${ticket.price} ₽</button>
+      <button class="buy-button">Купить за ${ticket.price} ₽</button>
     </div>
     <div class="info">
       <div class="departure">
