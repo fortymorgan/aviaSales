@@ -25,17 +25,17 @@ const render = () => {
     </div>
     <div class="info">
       <div class="departure">
-        <span class="departure-time">${ticket.departure_time}</span>
-        <span class="departure-point">${ticket.origin}, ${ticket.origin_name}</span>
-        <span class="departure-date">${ticket.departure_date}</span>
+        <div class="departure-time">${ticket.departure_time}</div>
+        <div class="departure-point">${ticket.origin}, ${ticket.origin_name}</div>
+        <div class="departure-date">${dateInFormat(ticket.departure_date)}</div>
       </div>
       <div class="stops">
-        <span class="stops-count">${stopsString}</span>
+        <div class="stops-count">${stopsString}</div>
       </div>
       <div class="arrival">
-        <span class="arrival-time">${ticket.arrival_time}</span>
-        <span class="arrival-point">${ticket.destination}, ${ticket.destination_name}</span>
-        <span class="arrival-date">${ticket.arrival_date}</span>
+        <div class="arrival-time">${ticket.arrival_time}</div>
+        <div class="arrival-point">${ticket.destination_name}, ${ticket.destination}</div>
+        <div class="arrival-date">${dateInFormat(ticket.arrival_date)}</div>
       </div>
     </div>`;
   
