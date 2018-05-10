@@ -46,29 +46,43 @@ const dateInFormat = dateString => {
   return `${day} ${month} ${year},${dayOfWeek}`;
 };
 
+const airLogos = {
+  TK: 'logos/TK.png',
+  S7: 'logos/S7.png',
+  BA: 'logos/BA.png',
+  SU: 'logos/SU.png',
+};
+
 const render = () => {
   tickets.forEach(ticket => {
     const ticketContainer = document.createElement('div');
     ticketContainer.classList.add('ticket');
     const stopsString = ticket.stops === 0 ? '' :
-      ticket.stops === 1 ? '1 ПЕРЕСАДКА' : `${ticket.stops} ПЕРЕСАДКИ`;
+      ticket.stops === 1 ? '1 пересадка' : `${ticket.stops} пересадки`;
   
-    ticketContainer.innerHTML = `<div class="buy">
-      <button class="buy-button">Купить за ${ticket.price} ₽</button>
+    ticketContainer.innerHTML = `<div class="logo-buy">
+      <div class="logo">
+        <img class="logo-img" src="${airLogos[ticket.carrier]}">
+      </div>
+      <button class="buy-button">Купить</br>за ${ticket.price.toLocaleString()}₽</button>
     </div>
-    <div class="info">
-      <div class="departure">
+    <div class="ticket-info">
+      <div class="time-stops">
         <div class="departure-time">${ticket.departure_time}</div>
-        <div class="departure-point">${ticket.origin}, ${ticket.origin_name}</div>
-        <div class="departure-date">${dateInFormat(ticket.departure_date)}</div>
-      </div>
-      <div class="stops">
-        <div class="stops-count">${stopsString}</div>
-      </div>
-      <div class="arrival">
+        <div class="stops">
+          <div class="stops-count">${stopsString}</div>
+        </div>
         <div class="arrival-time">${ticket.arrival_time}</div>
-        <div class="arrival-point">${ticket.destination_name}, ${ticket.destination}</div>
-        <div class="arrival-date">${dateInFormat(ticket.arrival_date)}</div>
+      </div>
+      <div class="point-date">
+        <div class="departure-point-date">
+          <div class="departure-point">${ticket.origin}, ${ticket.origin_name}</div>
+          <div class="departure-date">${dateInFormat(ticket.departure_date)}</div>
+        </div>
+        <div class="arrival-point-date">
+          <div class="arrival-point">${ticket.destination_name}, ${ticket.destination}</div>
+          <div class="arrival-date">${dateInFormat(ticket.arrival_date)}</div>
+        </div>
       </div>
     </div>`;
   
