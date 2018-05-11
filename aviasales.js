@@ -53,6 +53,8 @@ const airLogos = {
   SU: 'logos/SU.png',
 };
 
+const fullTimeString = timeString => (timeString.length < 5 ? `0${timeString}`: timeString)
+
 const render = () => {
   tickets.forEach(ticket => {
     const ticketContainer = document.createElement('div');
@@ -68,11 +70,11 @@ const render = () => {
     </div>
     <div class="ticket-info">
       <div class="time-stops">
-        <div class="departure-time">${ticket.departure_time}</div>
+        <div class="departure-time">${fullTimeString(ticket.departure_time)}</div>
         <div class="stops">
           <div class="stops-count">${stopsString}</div>
         </div>
-        <div class="arrival-time">${ticket.arrival_time}</div>
+        <div class="arrival-time">${fullTimeString(ticket.arrival_time)}</div>
       </div>
       <div class="point-date">
         <div class="departure-point-date">
