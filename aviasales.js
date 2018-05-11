@@ -1,17 +1,36 @@
 const link = 'https://raw.githubusercontent.com/KosyanMedia/test-tasks/master/aviasales/tickets.json';
 
 const tickets = [];
+const filter = [];
 
 fetch(link)
   .then(blob => blob.json())
   .then(data => {
     tickets.push(...data.tickets)
     tickets.sort((a, b) => a.price - b.price);
+    filtersRender();
     render();
   });
 
 
 const ticketsContainer = document.getElementById('tickets');
+const filtersContainer = document.getElementById('filters');
+const toggleAllCheckbox = document.getElementById('all');
+
+toggleAllCheckbox.addEventListener('click', event => {
+  const otherCheckboxes = document.querySelectorAll('input[id^=stops]');
+  event.target.checked ? fillFilter() : filter.splice(0);
+  otherCheckboxes.forEach(checkbox => checkbox.checked = event.target.checked);
+  render();
+});
+
+const fillFilter = () => {
+  tickets.forEach(ticket => {
+    if (!filter.includes(ticket.stops)) {
+      filter.push(ticket.stops);
+    }
+  });
+}
 
 const dateInFormat = dateString => {
   const dateArray = dateString.split('.');
@@ -56,7 +75,14 @@ const airLogos = {
 const fullTimeString = timeString => (timeString.length < 5 ? `0${timeString}`: timeString)
 
 const render = () => {
-  tickets.forEach(ticket => {
+  toggleAllCheckbox.checked = [...document.querySelectorAll('input[id^=stops]')]
+    .every(checkbox => checkbox.checked);
+
+  ticketsContainer.innerHTML = '';
+
+  const ticketsToShow = tickets.filter(ticket => filter.includes(ticket.stops));
+  
+  ticketsToShow.forEach(ticket => {
     const ticketContainer = document.createElement('div');
     ticketContainer.classList.add('ticket');
     const stopsString = ticket.stops === 0 ? '' :
@@ -92,3 +118,32 @@ const render = () => {
   });
 };
 
+const filtersRender = () => {
+  fillFilter();
+  filter.sort();
+
+  filter.forEach(count => {
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.classList.add('filter-checkbox');
+    checkbox.id = `stops-${count}`;
+    checkbox.value = count;
+    checkbox.checked = true;
+
+    const labelString = count === 0 ? 'Без пересадок' :
+      count === 1 ? '1 пересадка' : `${count} пересадки`;
+
+    const label = document.createElement('label');
+    label.htmlFor = checkbox.id;
+    label.innerText = labelString;
+
+    filtersContainer.appendChild(checkbox);
+    filtersContainer.appendChild(label);
+
+    checkbox.addEventListener('click', event => {
+      event.target.checked ? filter.push(+event.target.value) :
+        filter.splice(filter.indexOf(+event.target.value), 1);
+      render();
+    });
+  });
+}

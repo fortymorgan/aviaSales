@@ -75,6 +75,7 @@ body {
   display: inline-block;
   position: relative;
   bottom: 15px;
+  min-width: 94px;
   border-bottom: 1px solid #d2d5d6;
 }
 
