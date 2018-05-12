@@ -1,9 +1,19 @@
-const link = 'https://raw.githubusercontent.com/KosyanMedia/test-tasks/master/aviasales/tickets.json';
+const ticketsLink = 'https://raw.githubusercontent.com/KosyanMedia/test-tasks/master/aviasales/tickets.json';
+const currencyLink = 'https://www.cbr-xml-daily.ru/daily_json.js';
 
 const tickets = [];
-const filter = [];
+const state = {
+  filter: [],
+  currency: 'RUB',
+};
 
-fetch(link)
+let currencyDaily = {};
+
+fetch(currencyLink)
+  .then(blob => blob.json())
+  .then(data => currencyDaily = {...data.Valute});
+
+fetch(ticketsLink)
   .then(blob => blob.json())
   .then(data => {
     tickets.push(...data.tickets)
@@ -16,20 +26,36 @@ fetch(link)
 const ticketsContainer = document.getElementById('tickets');
 const filtersContainer = document.getElementById('filters');
 const toggleAllCheckbox = document.getElementById('all');
+const currencySelectors = document.querySelectorAll('input[type="radio"]');
 
 toggleAllCheckbox.addEventListener('click', event => {
   const otherCheckboxes = document.querySelectorAll('input[id^=stops]');
-  event.target.checked ? fillFilter() : filter.splice(0);
+  event.target.checked ? fillFilter() : state.filter.splice(0);
   otherCheckboxes.forEach(checkbox => checkbox.checked = event.target.checked);
   render();
 });
 
+currencySelectors.forEach(selector => selector.addEventListener('click', event => {
+  state.currency = event.target.value;
+  render();
+}));
+
 const fillFilter = () => {
   tickets.forEach(ticket => {
-    if (!filter.includes(ticket.stops)) {
-      filter.push(ticket.stops);
+    if (!state.filter.includes(ticket.stops)) {
+      state.filter.push(ticket.stops);
     }
   });
+};
+
+const priceOnCurrency = price => {
+  const priceObj = {
+    RUB: `${price.toLocaleString()}₽`,
+    EUR: `${Math.round(price / currencyDaily.EUR.Value * 100) / 100}€`,
+    USD: `${Math.round(price / currencyDaily.USD.Value * 100) / 100}$`,
+  };
+
+  return priceObj[state.currency];
 }
 
 const dateInFormat = dateString => {
@@ -80,7 +106,7 @@ const render = () => {
 
   ticketsContainer.innerHTML = '';
 
-  const ticketsToShow = tickets.filter(ticket => filter.includes(ticket.stops));
+  const ticketsToShow = tickets.filter(ticket => state.filter.includes(ticket.stops));
   
   ticketsToShow.forEach(ticket => {
     const ticketContainer = document.createElement('div');
@@ -92,7 +118,7 @@ const render = () => {
       <div class="logo">
         <img class="logo-img" src="${airLogos[ticket.carrier]}">
       </div>
-      <button class="buy-button">Купить</br>за ${ticket.price.toLocaleString()}₽</button>
+      <button class="buy-button">Купить</br>за ${priceOnCurrency(ticket.price)}</button>
     </div>
     <div class="ticket-info">
       <div class="time-stops">
@@ -120,9 +146,9 @@ const render = () => {
 
 const filtersRender = () => {
   fillFilter();
-  filter.sort();
+  state.filter.sort();
 
-  filter.forEach(count => {
+  state.filter.forEach(count => {
     const checkbox = document.createElement('label');
     checkbox.classList.add('for-checkbox-custom');
 
@@ -137,14 +163,14 @@ const filtersRender = () => {
     filtersContainer.appendChild(checkbox);
 
     checkbox.querySelector('input').addEventListener('click', event => {
-      event.target.checked ? filter.push(+event.target.value) :
-        filter.splice(filter.indexOf(+event.target.value), 1);
+      event.target.checked ? state.filter.push(+event.target.value) :
+        state.filter.splice(state.filter.indexOf(+event.target.value), 1);
       render();
     });
 
     checkbox.querySelector('.only').addEventListener('click', event => {
-      filter.splice(0);
-      filter.push(+event.target.value);
+      state.filter.splice(0);
+      state.filter.push(+event.target.value);
       const otherCheckboxes = document.querySelectorAll('input[id^=stops]');
       otherCheckboxes.forEach(checkbox => checkbox.checked = checkbox.id.includes(event.target.value));
       render();
