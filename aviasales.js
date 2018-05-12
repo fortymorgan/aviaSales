@@ -123,26 +123,30 @@ const filtersRender = () => {
   filter.sort();
 
   filter.forEach(count => {
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.classList.add('filter-checkbox');
-    checkbox.id = `stops-${count}`;
-    checkbox.value = count;
-    checkbox.checked = true;
+    const checkbox = document.createElement('label');
+    checkbox.classList.add('for-checkbox-custom');
 
     const labelString = count === 0 ? 'Без пересадок' :
       count === 1 ? '1 пересадка' : `${count} пересадки`;
 
-    const label = document.createElement('label');
-    label.htmlFor = checkbox.id;
-    label.innerText = labelString;
+    checkbox.innerHTML = `<input type="checkbox" id="stops-${count}" value="${count}" checked>
+    <span class="checkbox-custom"></span>
+    <span class="label">${labelString}</span>
+    <button class="only" value="${count}">Только</button>`;
 
     filtersContainer.appendChild(checkbox);
-    filtersContainer.appendChild(label);
 
-    checkbox.addEventListener('click', event => {
+    checkbox.querySelector('input').addEventListener('click', event => {
       event.target.checked ? filter.push(+event.target.value) :
         filter.splice(filter.indexOf(+event.target.value), 1);
+      render();
+    });
+
+    checkbox.querySelector('.only').addEventListener('click', event => {
+      filter.splice(0);
+      filter.push(+event.target.value);
+      const otherCheckboxes = document.querySelectorAll('input[id^=stops]');
+      otherCheckboxes.forEach(checkbox => checkbox.checked = checkbox.id.includes(event.target.value));
       render();
     });
   });

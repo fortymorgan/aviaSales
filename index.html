@@ -8,11 +8,19 @@
   <title>AviaSales Tickets</title>
 </head>
 <body>
-  <div class="filters" id="filters">
-    <input type="checkbox" id="all">
-    <label for="all">Все</label>
+  <div class="container">
+    <div class="currency-filters">
+      <div class="currency"></div>
+      <div class="filters" id="filters">
+        <label class="for-checkbox-custom">
+          <input type="checkbox" id="all">
+          <span class="checkbox-custom"></span>
+          <span class="label">Все</span>
+        </label>
+      </div>
+    </div>
+    <div class="tickets" id="tickets"></div>
   </div>
-  <div class="tickets" id="tickets"></div>
   <script src="aviasales.js"></script>
 </body>
 </html>
