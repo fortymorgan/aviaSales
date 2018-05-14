@@ -6,7 +6,7 @@ body {
   display: flex;
   position: relative;
   align-items: flex-start;
-  justify-content: flex-end;
+  justify-content: flex-start;
   margin: 0 auto;
   width: 1022px;
   font-family: 'Open Sans', sans-serif;
@@ -29,6 +29,8 @@ body {
 .currency-filters {
   display: flex;
   flex-direction: column;
+  margin-left: 103px;
+  margin-right: 20px;
   padding-top: 15px;
   padding-bottom: 13px;
   background: #ffffff;
@@ -154,11 +156,6 @@ label.eur {
   display: inline;
 }
 /* filters */
-
-.tickets {
-  margin-right: 103px;
-  margin-left: 20px;
-}
 
 /* ticket */
 .ticket {
