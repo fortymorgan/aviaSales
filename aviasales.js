@@ -28,6 +28,12 @@ const filtersContainer = document.getElementById('filters');
 const toggleAllCheckbox = document.getElementById('all');
 const currencySelectors = document.querySelectorAll('input[type="radio"]');
 
+const priceObj = {
+  RUB: price => `${price.toLocaleString()}₽`,
+  EUR: price => `${Math.round(price / currencyDaily.EUR.Value * 100) / 100}€`,
+  USD: price => `${Math.round(price / currencyDaily.USD.Value * 100) / 100}$`,
+};
+
 toggleAllCheckbox.addEventListener('click', event => {
   const otherCheckboxes = document.querySelectorAll('input[id^=stops]');
   event.target.checked ? fillFilter() : state.filter.splice(0);
@@ -47,16 +53,6 @@ const fillFilter = () => {
     }
   });
 };
-
-const priceOnCurrency = price => {
-  const priceObj = {
-    RUB: `${price.toLocaleString()}₽`,
-    EUR: `${Math.round(price / currencyDaily.EUR.Value * 100) / 100}€`,
-    USD: `${Math.round(price / currencyDaily.USD.Value * 100) / 100}$`,
-  };
-
-  return priceObj[state.currency];
-}
 
 const dateInFormat = dateString => {
   const dateArray = dateString.split('.');
@@ -118,7 +114,7 @@ const render = () => {
       <div class="logo">
         <img class="logo-img" src="${airLogos[ticket.carrier]}">
       </div>
-      <button class="buy-button">Купить</br>за ${priceOnCurrency(ticket.price)}</button>
+      <button class="buy-button">Купить</br>за ${priceObj[state.currency](ticket.price)}</button>
     </div>
     <div class="ticket-info">
       <div class="time-stops">
