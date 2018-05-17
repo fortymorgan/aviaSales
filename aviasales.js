@@ -28,10 +28,20 @@ const filtersContainer = document.getElementById('filters');
 const toggleAllCheckbox = document.getElementById('all');
 const currencySelectors = document.querySelectorAll('input[type="radio"]');
 
+const numberWithSpaces = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+};
+
 const priceObj = {
-  RUB: price => `${price.toLocaleString()}₽`,
-  EUR: price => `${Math.round(price / currencyDaily.EUR.Value * 100) / 100}€`,
-  USD: price => `${Math.round(price / currencyDaily.USD.Value * 100) / 100}$`,
+  RUB: price => `${numberWithSpaces(price)}₽`,
+  EUR: price => {
+    const inEuro = Math.round(price / currencyDaily.EUR.Value * 100) / 100;
+    return `${numberWithSpaces(inEuro)}€`
+  },
+  USD: price => {
+    inDollar = Math.round(price / currencyDaily.USD.Value * 100) / 100
+    return `${numberWithSpaces(inDollar)}$`
+  },
 };
 
 toggleAllCheckbox.addEventListener('click', event => {
