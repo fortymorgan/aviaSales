@@ -71,6 +71,10 @@ const airLogos = {
   SU: 'logos/SU.png',
 };
 
+const timeToString = time => moment(time, 'HH:mm').format('HH:mm');
+
+const dateToString = date => moment(date, 'DD.MM.YY').locale('ru').format('DD MMM YYYY,dd');
+
 const render = () => {
   toggleAllCheckbox.checked = [...document.querySelectorAll('input[id^=stops]')]
     .every(checkbox => checkbox.checked);
@@ -93,20 +97,20 @@ const render = () => {
     </div>
     <div class="ticket-info">
       <div class="time-stops">
-        <div class="departure-time">${moment(ticket.departure_time, 'HH:mm').format('HH:mm')}</div>
+        <div class="departure-time">${timeToString(ticket.departure_time)}</div>
         <div class="stops">
           <div class="stops-count">${stopsString}</div>
         </div>
-        <div class="arrival-time">${moment(ticket.arrival_time, 'HH:mm').format('HH:mm')}</div>
+        <div class="arrival-time">${timeToString(ticket.arrival_time)}</div>
       </div>
       <div class="point-date">
         <div class="departure-point-date">
           <div class="departure-point">${ticket.origin}, ${ticket.origin_name}</div>
-          <div class="departure-date">${moment(ticket.departure_date, 'DD.MM.YY').locale('ru').format('DD MMM YYYY,dd')}</div>
+          <div class="departure-date">${dateToString(ticket.departure_date)}</div>
         </div>
         <div class="arrival-point-date">
           <div class="arrival-point">${ticket.destination_name}, ${ticket.destination}</div>
-          <div class="arrival-date">${moment(ticket.arrival_date, 'DD.MM.YY').locale('ru').format('DD MMM YYYY,dd')}</div>
+          <div class="arrival-date">${dateToString(ticket.arrival_date)}</div>
         </div>
       </div>
     </div>`;
