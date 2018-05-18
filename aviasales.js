@@ -28,10 +28,20 @@ const filtersContainer = document.getElementById('filters');
 const toggleAllCheckbox = document.getElementById('all');
 const currencySelectors = document.querySelectorAll('input[type="radio"]');
 
+const numberWithSpaces = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+};
+
 const priceObj = {
-  RUB: price => `${price.toLocaleString()}₽`,
-  EUR: price => `${Math.round(price / currencyDaily.EUR.Value * 100) / 100}€`,
-  USD: price => `${Math.round(price / currencyDaily.USD.Value * 100) / 100}$`,
+  RUB: price => `${numberWithSpaces(price)}₽`,
+  EUR: price => {
+    const inEuro = Math.round(price / currencyDaily.EUR.Value * 100) / 100;
+    return `${numberWithSpaces(inEuro)}€`
+  },
+  USD: price => {
+    inDollar = Math.round(price / currencyDaily.USD.Value * 100) / 100
+    return `${numberWithSpaces(inDollar)}$`
+  },
 };
 
 toggleAllCheckbox.addEventListener('click', event => {
@@ -54,39 +64,6 @@ const fillFilter = () => {
   });
 };
 
-const dateInFormat = dateString => {
-  const dateArray = dateString.split('.');
-  const date = new Date(`20${dateArray[2]}`, dateArray[1], dateArray[0]);
-  const day = date.getDate();
-  const daysOfWeek = {
-    0: 'Вс',
-    1: 'Пн',
-    2: 'Вт',
-    3: 'Ср',
-    4: 'Чт',
-    5: 'Пт',
-    6: 'Сб',
-  };
-  const dayOfWeek = daysOfWeek[date.getDay()];
-  const months = {
-    1: 'янв',
-    2: 'фев',
-    3: 'мар',
-    4: 'апр',
-    5: 'мая',
-    6: 'июня',
-    7: 'июля',
-    8: 'авг',
-    9: 'сен',
-    10: 'окт',
-    11: 'ноя',
-    12: 'дек',
-  };
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
-  return `${day} ${month} ${year},${dayOfWeek}`;
-};
-
 const airLogos = {
   TK: 'logos/TK.png',
   S7: 'logos/S7.png',
@@ -94,7 +71,9 @@ const airLogos = {
   SU: 'logos/SU.png',
 };
 
-const fullTimeString = timeString => (timeString.length < 5 ? `0${timeString}`: timeString)
+const timeToString = time => moment(time, 'HH:mm').format('HH:mm');
+
+const dateToString = date => moment(date, 'DD.MM.YY').locale('ru').format('DD MMM YYYY,dd');
 
 const render = () => {
   toggleAllCheckbox.checked = [...document.querySelectorAll('input[id^=stops]')]
@@ -118,20 +97,20 @@ const render = () => {
     </div>
     <div class="ticket-info">
       <div class="time-stops">
-        <div class="departure-time">${fullTimeString(ticket.departure_time)}</div>
+        <div class="departure-time">${timeToString(ticket.departure_time)}</div>
         <div class="stops">
           <div class="stops-count">${stopsString}</div>
         </div>
-        <div class="arrival-time">${fullTimeString(ticket.arrival_time)}</div>
+        <div class="arrival-time">${timeToString(ticket.arrival_time)}</div>
       </div>
       <div class="point-date">
         <div class="departure-point-date">
           <div class="departure-point">${ticket.origin}, ${ticket.origin_name}</div>
-          <div class="departure-date">${dateInFormat(ticket.departure_date)}</div>
+          <div class="departure-date">${dateToString(ticket.departure_date)}</div>
         </div>
         <div class="arrival-point-date">
           <div class="arrival-point">${ticket.destination_name}, ${ticket.destination}</div>
-          <div class="arrival-date">${dateInFormat(ticket.arrival_date)}</div>
+          <div class="arrival-date">${dateToString(ticket.arrival_date)}</div>
         </div>
       </div>
     </div>`;
