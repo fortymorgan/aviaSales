@@ -156,6 +156,7 @@ label.eur {
 
 .for-checkbox-custom:hover .only {
   display: inline;
+  cursor: pointer;
 }
 /* filters */
 
