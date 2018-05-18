@@ -83,6 +83,7 @@ label.eur {
 .currency label:hover {
   border: 1px solid #2196f3;
   background: #f1fcff;
+  cursor: pointer;
 }
 
 .currency input:checked + label {
@@ -150,6 +151,7 @@ label.eur {
 
 .for-checkbox-custom:hover {
   background: #f1fcff;
+  cursor: pointer;
 }
 
 .for-checkbox-custom:hover .only {
@@ -202,6 +204,7 @@ label.eur {
 
 .buy-button:hover {
   background: #ff8124;
+  cursor: pointer;
 }
 /* ticket-left */
 
